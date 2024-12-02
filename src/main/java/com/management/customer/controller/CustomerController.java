@@ -2,11 +2,13 @@ package com.management.customer.controller;
 
 import com.management.customer.entity.Customer;
 import com.management.customer.service.CustomerService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,7 +20,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping
+    @GetMapping("/")
     public List<Customer> getAllCustomers() {
         return customerService.getAllCustomers();
     }
@@ -29,8 +31,12 @@ public class CustomerController {
         return customer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+    @PostMapping("/add")
+    public ResponseEntity createCustomer(@RequestBody Customer customer) {
+        Customer existingCustomer = customerService.findByEmail(customer.getEmailId());
+        if (existingCustomer != null) {
+            return ResponseEntity.ok("Customer Already Exist");
+        }
         Customer savedCustomer = customerService.addCustomer(customer);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer);
     }
@@ -58,8 +64,8 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/email")
-    public ResponseEntity<Customer> findByEmail(@PathVariable String email) {
+    @GetMapping("/email={email}")
+    public ResponseEntity<Customer> findByEmail(@PathVariable(name = "email") String email) {
         Customer customer = customerService.findByEmail(email);
         if (customer != null) {
             return ResponseEntity.status(HttpStatus.FOUND).body(customer);

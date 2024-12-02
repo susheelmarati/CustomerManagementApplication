@@ -26,33 +26,33 @@ public class CustomerServiceTest {
     private CustomerService customerService;
 
     @Test
-    public void testAddCustomer() {
+    public void testAddCustomer() throws Exception {
         Customer customer = new Customer();
-        customer.setId(String.valueOf(UUID.randomUUID()));
+        customer.setId(UUID.randomUUID());
         customer.setEmailId("stevesmith@gmail.com");
         customer.setFirstName("steve");
         customer.setLastName("smith");
         customer.setMobile("+120 23343533");
-        when(customerRepository.saveAndFlush(customer)).thenReturn(customer);
+        when(customerRepository.save(customer)).thenReturn(customer);
 
         Customer result = customerService.addCustomer(customer);
         assertEquals("steve", result.getFirstName());
         assertEquals("stevesmith@gmail.com", result.getEmailId());
         assertEquals("+120 23343533", result.getMobile());
-        verify(customerRepository, times(1)).saveAndFlush(customer);
+        verify(customerRepository, times(1)).save(customer);
     }
 
     @Test
     public void testGetCustomerById() {
         Customer customer = new Customer();
         UUID uuid = UUID.randomUUID();
-        customer.setId(String.valueOf(uuid));
+        customer.setId(uuid);
         customer.setEmailId("stevesmith@gmail.com");
         customer.setFirstName("steve");
         customer.setLastName("smith");
         customer.setMobile("+120 23343533");
 
-        when(customerRepository.findById(String.valueOf(uuid))).thenReturn(Optional.of(customer));
+        when(customerRepository.findById(uuid)).thenReturn(Optional.of(customer));
 
         Optional<Customer> result = customerService.getCustomerById(String.valueOf(uuid));
 
@@ -64,7 +64,7 @@ public class CustomerServiceTest {
     @Test
     public void testGetCustomerByIdNotFound() {
         UUID uuid = UUID.randomUUID();
-        when(customerRepository.findById(String.valueOf(uuid))).thenReturn(Optional.empty());
+        when(customerRepository.findById(uuid)).thenReturn(Optional.empty());
 
         Optional<Customer> result = customerService.getCustomerById(String.valueOf(uuid));
         assertFalse(result.isPresent());
@@ -74,7 +74,7 @@ public class CustomerServiceTest {
     void getAllCustomers() {
         Customer customer1 = new Customer();
         UUID uuid = UUID.randomUUID();
-        customer1.setId(String.valueOf(uuid));
+        customer1.setId(uuid);
         customer1.setEmailId("stevesmith@gmail.com");
         customer1.setFirstName("steve");
         customer1.setLastName("smith");
@@ -82,7 +82,7 @@ public class CustomerServiceTest {
 
         Customer customer2 = new Customer();
         uuid = UUID.randomUUID();
-        customer2.setId(String.valueOf(uuid));
+        customer2.setId(uuid);
         customer2.setEmailId("johnmarkAnthony@gmail.com");
         customer2.setFirstName("john");
         customer2.setMiddleName("anthony");
@@ -101,13 +101,13 @@ public class CustomerServiceTest {
 
         UUID uuid = UUID.randomUUID();
         customerService.deleteCustomer(String.valueOf(uuid));
-        verify(customerRepository, times(1)).deleteById(String.valueOf(uuid));
+        verify(customerRepository, times(1)).deleteById(uuid);
     }
 
     @Test
     void updateCustomer() {
         Customer customer = new Customer();
-        customer.setId(String.valueOf(UUID.randomUUID()));
+        customer.setId(UUID.randomUUID());
         customer.setEmailId("stevesmith@gmail.com");
         customer.setFirstName("steve");
         customer.setLastName("smith");

@@ -45,7 +45,7 @@ class CustomerControllerTest {
     @Test
     void createCustomer() throws Exception {
         Customer customer = new Customer();
-        customer.setId(String.valueOf(UUID.randomUUID()));
+        customer.setId(UUID.randomUUID());
         customer.setEmailId("stevesmith@gmail.com");
         customer.setFirstName("steve");
         customer.setLastName("smith");
@@ -57,7 +57,7 @@ class CustomerControllerTest {
 
         final String customerJson = new ObjectMapper().writeValueAsString(customer);
 
-        mockMvc.perform(post("/v1/customer")
+        mockMvc.perform(post("/v1/customer/add")
                         .contentType("application/json")
                         .content(customerJson))
                 .andExpect(status().isCreated())
@@ -69,14 +69,14 @@ class CustomerControllerTest {
     void updateCustomer() throws Exception {
         UUID uuid = UUID.randomUUID();
         Customer customer1 = new Customer();
-        customer1.setId(String.valueOf(uuid));
+        customer1.setId(uuid);
         customer1.setEmailId("stevesmith@gmail.com");
         customer1.setFirstName("steve");
         customer1.setLastName("smith");
         customer1.setMobile("+120 23343533");
 
         Customer customer2 = new Customer();
-        customer2.setId(String.valueOf(uuid));
+        customer2.setId(uuid);
         customer2.setEmailId("stevesmith1234@gmail.com");
         customer2.setFirstName("steve");
         customer2.setLastName("smith");
