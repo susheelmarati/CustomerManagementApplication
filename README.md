@@ -66,17 +66,17 @@ In `customer`:
 * `com/management/customer/service` - service classes for customer,
 * `com/management/customer/controller` - controller classes for customer,
 
-installation kubectl and minikube
+### installation kubectl and minikube
   
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-arm64
-sudo install minikube-darwin-arm64 /usr/local/bin/minikube
+#### curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-arm64
+#### sudo install minikube-darwin-arm64 /usr/local/bin/minikube
  
-# deploying in minikube
-  minikube docker-env
-  minikube start
-  docker build . -t  customerapp
-  minikube image load customerapp
-  minikube image ls --format table
-  kubectl run first-container --image=customerapp --image-pull-policy=Never
-  kubectl logs first-container
+#### deploying in minikube
+ ##### minikube docker-env
+ ##### minikube start
+ ##### docker build . -t  customerapp
+ ##### minikube image load customerapp
+ ##### minikube image ls --format table
+ ##### kubectl run first-container --image=customerapp --image-pull-policy=Never
+ ##### kubectl logs first-container
 
